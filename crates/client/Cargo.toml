@@ -1,0 +1,18 @@
+[package]
+name = "tig-client"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+tig-proto = { workspace = true }
+color-eyre = { workspace = true }
+tokio = { workspace = true }
+tonic = { workspace = true, features = ["tls-native-roots", "tls-aws-lc"] }
+futures-util = { workspace = true }
+tokio-util = { workspace = true }
+bytes = { workspace = true }
+serde = { workspace = true }
+config = { workspace = true }
+semver = { workspace = true }
+open = "5.3.2"
+

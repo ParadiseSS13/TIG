@@ -1,0 +1,42 @@
+syntax = "proto3";
+package tig;
+
+/**/
+
+message GetVersionRequest {}
+
+message GetVersionResponse {
+  optional string version = 1;
+}
+
+service Version {
+  rpc GetVersion(GetVersionRequest) returns (GetVersionResponse);
+}
+
+/**/
+
+service Proxy {
+  rpc Proxy(stream ProxyRequest) returns (stream ProxyResponse);
+}
+
+message ProxyRequest {
+  ProxyData data = 1;
+}
+
+message ProxyResponse {
+  ProxyData data = 1;
+}
+
+
+/**/
+
+message ProxyData {
+  oneof data {
+    bytes bytes = 1;
+    ProxyDataEof eof = 2;
+  }
+}
+
+message ProxyDataEof {
+  optional string reason = 1;
+}

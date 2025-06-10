@@ -1,0 +1,20 @@
+# Required, address of the server to connect to
+#remote_address: http://127.0.0.1:5564
+
+# Optional, address to listen for local connections on. By default, is set to 127.0.0.1:0. Use port 0 for a random port
+#listen_address: 127.0.0.1:0
+
+# Optional, url to open with the default protocol handler once the connection is established.
+#   {ip} is replaced with the ip in listen_addresss.
+#   {port} is replaced with the port in listen_address. If 0 is used in listen_address, the actual port will be used.
+#open_url: https://{ip}:{port}
+
+####################
+# Advanced options #
+####################
+
+# Optional, size of the queue for packets pending to be sent to the remote. Defaults to 4 packets.
+#remote_send_queue_length: 4
+
+# Optional, size of the received packet buffers for the local connection. Defaults to 1024 bytes.
+#local_receive_buffer_size: 1024
