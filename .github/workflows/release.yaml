@@ -1,0 +1,59 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ "master" ]
+    tags:
+      - "v*"
+  pull_request:
+    branches: [ "master" ]
+    
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      attestations: write
+      actions: read
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Generate SBOM
+      uses: anchore/sbom-action@v0
+      with:
+        format: 'spdx-json'
+        output-file: 'sbom.spdx.json'
+        dependency-snapshot: true
+
+    - name: Build
+      run: ./build.sh
+
+    - name: Upload client exe artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: tig-client.exe
+        path: build/tig-client.exe
+
+    - name: Upload client artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: tig-client
+        path: build/tig-client
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: github.ref_type == 'tag'
+      with:
+        files: build/*
+        fail_on_unmatched_files: true
+        generate_release_notes: true
+        make_latest: true
+        
+    - name: Attest
+      uses: actions/attest-sbom@v2
+      with:
+        subject-path: 'build/*'
+        sbom-path: 'sbom.spdx.json'
