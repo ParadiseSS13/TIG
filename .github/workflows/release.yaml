@@ -21,15 +21,25 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
     - name: Generate SBOM
       uses: anchore/sbom-action@v0
+      if: github.ref_type == 'tag'
       with:
         format: 'spdx-json'
         output-file: 'sbom.spdx.json'
         dependency-snapshot: true
 
     - name: Build
-      run: ./build.sh
+      uses: docker/build-push-action@v6
+      with:
+        push: false
+        context: .
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        outputs: type=local,dest=build
 
     - name: Upload client exe artifact
       uses: actions/upload-artifact@v4
@@ -54,6 +64,7 @@ jobs:
         
     - name: Attest
       uses: actions/attest-sbom@v2
+      if: github.ref_type == 'tag'
       with:
         subject-path: 'build/*'
         sbom-path: 'sbom.spdx.json'
