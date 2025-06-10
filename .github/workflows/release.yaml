@@ -57,3 +57,4 @@ jobs:
       with:
         subject-path: 'build/*'
         sbom-path: 'sbom.spdx.json'
+
