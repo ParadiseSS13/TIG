@@ -74,4 +74,3 @@ jobs:
       if: github.ref_type == 'tag'
       with:
         subject-path: 'build/*'
-        sbom-path: 'sbom.spdx.json'
