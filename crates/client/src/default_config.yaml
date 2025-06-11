@@ -1,4 +1,6 @@
-listen_address: "127.0.0.1:0"
+listen_address: "127.0.0.1:6666"
 use_ssl_key_log: false
 remote_send_queue_length: 4
 local_receive_buffer_size: 1024
+
+remote_address: https://birmingham.paradisestation.org
