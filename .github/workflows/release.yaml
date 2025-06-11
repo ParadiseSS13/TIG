@@ -62,10 +62,16 @@ jobs:
         generate_release_notes: true
         make_latest: true
         
-    - name: Attest
+    - name: Attest SBOM
       uses: actions/attest-sbom@v2
       if: github.ref_type == 'tag'
       with:
         subject-path: 'build/*'
         sbom-path: 'sbom.spdx.json'
 
+    - name: Attest
+      uses: actions/attest-build-provenance@v2
+      if: github.ref_type == 'tag'
+      with:
+        subject-path: 'build/*'
+        sbom-path: 'sbom.spdx.json'
