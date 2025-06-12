@@ -28,10 +28,10 @@ impl TigConfig {
         self.open_url.as_ref()
     }
     pub fn use_ssl_key_log(&self) -> bool {
-        self.use_ssl_key_log && cfg!(debug_assertions)
+        self.use_ssl_key_log && true
     }
     pub fn ssl_key_log(&self) -> Option<&String> {
-        if !cfg!(debug_assertions) {
+        if !true {
             None
         } else {
             self.ssl_key_log.as_ref()
