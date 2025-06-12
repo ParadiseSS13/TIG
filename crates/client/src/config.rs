@@ -11,6 +11,7 @@ pub struct TigConfig {
     remote_address: String,
     open_url: Option<String>,
     use_ssl_key_log: bool,
+    ssl_key_log: Option<String>,
     remote_send_queue_length: usize,
     local_receive_buffer_size: usize,
 }
@@ -28,6 +29,13 @@ impl TigConfig {
     }
     pub fn use_ssl_key_log(&self) -> bool {
         self.use_ssl_key_log && cfg!(debug_assertions)
+    }
+    pub fn ssl_key_log(&self) -> Option<&String> {
+        if !cfg!(debug_assertions) {
+            None
+        } else {
+            self.ssl_key_log.as_ref()
+        }
     }
     pub fn remote_send_queue_length(&self) -> usize {
         self.remote_send_queue_length

@@ -2,6 +2,7 @@
 
 mod config;
 
+use std::env;
 use crate::config::TigConfig;
 use bytes::{BufMut, BytesMut};
 use color_eyre::Result;
@@ -25,9 +26,7 @@ use tonic::codegen::tokio_stream::StreamExt;
 use tonic::codegen::tokio_stream::wrappers::ReceiverStream;
 use tonic::transport::{Channel, ClientTlsConfig, Endpoint};
 
-async fn connect() -> Result<()> {
-    let config = TigConfig::new()?;
-
+async fn connect(config: &TigConfig) -> Result<()> {
     let mut tls_config = ClientTlsConfig::new()
         .with_enabled_roots()
         .assume_http2(true);
@@ -347,5 +346,15 @@ async fn handle_connection(
 async fn main() -> Result<()> {
     color_eyre::install()?;
 
-    connect().await
+    let config = TigConfig::new()?;
+
+    if let Some(ssl_key_log) = config.ssl_key_log() {
+        // This is safe because the only thing to access it is the grpc client
+        // and the grpc client thread is not spawned until connect();
+        unsafe {
+            env::set_var("SSLKEYLOGFILE", ssl_key_log);
+        }
+    }
+
+    connect(&config).await
 }
